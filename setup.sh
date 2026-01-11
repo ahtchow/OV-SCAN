@@ -1,9 +1,9 @@
 #!/bin/bash
-set -e  # Exit on error
-
 # ==============================================================================
 # OV-SCAN Setup Script
 # ==============================================================================
+# Note: Script will continue even if some components fail
+# Check the summary at the end for what succeeded/failed
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 
@@ -12,6 +12,9 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
+
+# Track overall success
+OVERALL_SUCCESS=true
 
 # ==============================================================================
 # Function: Setup DCNv4
@@ -24,15 +27,21 @@ setup_dcnv4() {
     
     if [ ! -d "/OV-SCAN/repos/DCNv4" ]; then
         echo -e "${RED}✗ DCNv4 repository not found at /OV-SCAN/repos/DCNv4${NC}"
+        OVERALL_SUCCESS=false
         return 1
     fi
     
     cd /OV-SCAN/repos/DCNv4/DCNv4_op/
-    python3 setup.py build_ext --inplace
-    pip install -e . --no-user
-    cd /OV-SCAN
-    
-    echo -e "${GREEN}✓ DCNv4 setup complete${NC}"
+    if python3 setup.py build_ext --inplace && pip install -e . --no-user; then
+        cd /OV-SCAN
+        echo -e "${GREEN}✓ DCNv4 setup complete${NC}"
+        return 0
+    else
+        cd /OV-SCAN
+        echo -e "${RED}✗ DCNv4 setup failed${NC}"
+        OVERALL_SUCCESS=false
+        return 1
+    fi
 }
 
 # ==============================================================================
@@ -46,11 +55,13 @@ setup_nuscenes() {
     
     if [ ! -d "/OV-SCAN/repos/nuscenes-devkit" ]; then
         echo -e "${RED}✗ nuscenes-devkit repository not found${NC}"
+        OVERALL_SUCCESS=false
         return 1
     fi
     
     export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/nuscenes-devkit/python-sdk
     echo -e "${GREEN}✓ NuScenes Devkit setup complete${NC}"
+    return 0
 }
 
 # ==============================================================================
@@ -64,6 +75,7 @@ setup_icp_flow() {
     
     if [ ! -d "/OV-SCAN/repos/ICP-Flow" ]; then
         echo -e "${RED}✗ ICP-Flow repository not found${NC}"
+        OVERALL_SUCCESS=false
         return 1
     fi
     
@@ -73,16 +85,21 @@ setup_icp_flow() {
     mkdir -p build
     cd build
     
-    cmake .. -DCMAKE_BUILD_TYPE=Release
-    make -j$(nproc)
-    
-    cd /OV-SCAN
-    
-    # Add to PYTHONPATH
-    export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/ICP-Flow
-    export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/ICP-Flow/patchwork-plusplus/build/python_wrapper
-    
-    echo -e "${GREEN}✓ ICP-Flow setup complete${NC}"
+    if cmake .. -DCMAKE_BUILD_TYPE=Release && make -j$(nproc); then
+        cd /OV-SCAN
+        
+        # Add to PYTHONPATH
+        export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/ICP-Flow
+        export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/ICP-Flow/patchwork-plusplus/build/python_wrapper
+        
+        echo -e "${GREEN}✓ ICP-Flow setup complete${NC}"
+        return 0
+    else
+        cd /OV-SCAN
+        echo -e "${RED}✗ ICP-Flow setup failed${NC}"
+        OVERALL_SUCCESS=false
+        return 1
+    fi
 }
 
 # ==============================================================================
@@ -96,11 +113,13 @@ setup_immortaltracker() {
     
     if [ ! -d "/OV-SCAN/repos/ImmortalTracker" ]; then
         echo -e "${RED}✗ ImmortalTracker repository not found${NC}"
+        OVERALL_SUCCESS=false
         return 1
     fi
     
     export PYTHONPATH=$PYTHONPATH:/OV-SCAN/repos/ImmortalTracker
     echo -e "${GREEN}✓ ImmortalTracker setup complete${NC}"
+    return 0
 }
 
 # ==============================================================================
@@ -148,8 +167,10 @@ verify_installations() {
     
     if [ "$all_success" = false ]; then
         echo -e "${YELLOW}⚠ Some components failed verification${NC}"
-        return 1
+        OVERALL_SUCCESS=false
     fi
+    
+    return 0
 }
 
 # ==============================================================================
@@ -162,19 +183,29 @@ main() {
     echo "========================================="
     
     # Run setup functions
-    setup_dcnv4
     setup_nuscenes
     setup_icp_flow
     setup_immortaltracker
-    
+    setup_dcnv4
+
     # Verify everything
     verify_installations
     
     echo ""
     echo "========================================="
-    echo -e "${GREEN}✓ OV-SCAN Environment Ready!${NC}"
+    if [ "$OVERALL_SUCCESS" = true ]; then
+        echo -e "${GREEN}✓ OV-SCAN Environment Ready!${NC}"
+        echo "All components set up successfully."
+    else
+        echo -e "${YELLOW}⚠ OV-SCAN Setup Complete with Warnings${NC}"
+        echo "Some components failed. Check messages above."
+        echo "You can still use the container - fix issues as needed."
+    fi
     echo "========================================="
 }
 
 # Run main function
 main
+
+# Don't exit the shell even if setup had issues
+exit 0

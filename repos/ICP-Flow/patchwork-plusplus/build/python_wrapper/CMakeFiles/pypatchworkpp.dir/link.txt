@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -O3 -DNDEBUG -shared  -o pypatchworkpp.cpython-38-x86_64-linux-gnu.so CMakeFiles/pypatchworkpp.dir/pybinding.cpp.o  -Wl,-rpath,/OV-SCAN/repos/ICP-Flow/patchwork-plusplus/build/patchworkpp -flto ../patchworkpp/libpatchworkpp.so 
