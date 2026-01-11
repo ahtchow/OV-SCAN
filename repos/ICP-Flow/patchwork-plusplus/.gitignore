@@ -1,0 +1,26 @@
+# Build directory
+build/*
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Compiled files
+*.so
+*.o
+*.a
+*.pyc
+*.pyo
+
+# Python cache
+__pycache__/
+*.egg-info/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
