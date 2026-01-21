@@ -123,6 +123,34 @@ setup_immortaltracker() {
 }
 
 # ==============================================================================
+# Function: Setup OV-SCAN Package
+# ==============================================================================
+setup_ov_scan() {
+    echo ""
+    echo "========================================="
+    echo "Setting up OV-SCAN Package..."
+    echo "========================================="
+    
+    if [ ! -d "/OV-SCAN/OV-SCAN" ]; then
+        echo -e "${RED}✗ OV-SCAN directory not found at /OV-SCAN/OV-SCAN${NC}"
+        OVERALL_SUCCESS=false
+        return 1
+    fi
+    
+    cd /OV-SCAN/OV-SCAN
+    if python3 setup.py develop --user; then
+        cd /OV-SCAN
+        echo -e "${GREEN}✓ OV-SCAN package setup complete${NC}"
+        return 0
+    else
+        cd /OV-SCAN
+        echo -e "${RED}✗ OV-SCAN package setup failed${NC}"
+        OVERALL_SUCCESS=false
+        return 1
+    fi
+}
+
+# ==============================================================================
 # Function: Verify Installations
 # ==============================================================================
 verify_installations() {
@@ -183,6 +211,7 @@ main() {
     echo "========================================="
     
     # Run setup functions
+    setup_ov_scan
     setup_nuscenes
     setup_icp_flow
     setup_immortaltracker
@@ -206,6 +235,3 @@ main() {
 
 # Run main function
 main
-
-# Don't exit the shell even if setup had issues
-exit 0

@@ -39,6 +39,8 @@ build:
 exec:
 	docker run \
 		--runtime nvidia ${DOCKER_OPTS} \
+		-v $${PWD}/OV-SCAN:/OV-SCAN/OV-SCAN/ \
+		-v ${DATASET_ROOT}:${DATASET_ROOT} \
 		-v $${PWD}/repos:/OV-SCAN/repos \
 		-v $${PWD}/datasets:/OV-SCAN/datasets \
 		-v $${PWD}/setup.sh:/OV-SCAN/setup.sh \

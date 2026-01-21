@@ -98,12 +98,12 @@ RUN pip install \
 # Extra utilities and dev tools 
 # ------------------------------------------------------------------------------
 RUN pip install \
-    setuptools==59.5.0 yapf==0.40.1 protobuf==3.19.0 \
+    setuptools==59.5.0 yapf==0.40.1 protobuf==3.20.0 \
     einops==0.8.0 fvcore iopath==0.1.9 timm==0.6.13 typing-extensions==4.5.0 \
     pylint ipython==8.12 numpy==1.23.0 matplotlib==3.5.2 \
-    llvmlite==0.41.1 numba==0.58.1 pandas==1.4.4 scikit-image==0.19.3 \
+    llvmlite==0.32.1 numba==0.49.0 pandas==1.4.4 scikit-image==0.19.3 \
     setuptools==59.5.0 torchpack==0.3.1 wandb==0.18.0 tqdm transformers==4.46.3 \
-    open_clip_torch==2.26.1 kaleido==0.2.1 pillow==10.4.0
+    open_clip_torch==2.26.1 kaleido==0.2.1 pillow==10.4.0 tensorboardX==2.6.2.2
 
 # ------------------------------------------------------------------------------
 # ICP-Flow Dependencies 
