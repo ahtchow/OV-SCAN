@@ -15,8 +15,34 @@ OV-SCAN is an Open-Vocabulary 3D framework that enforces Semantically Consistent
 <img src="./assets/media/ov-scan-method.jpg" alt="Overall framework for OV-SCAN"/> 
 <p align="center"><em>Overall framework for OV-SCAN</em></p>
 
-## Code
-We will be releasing the code in the coming weeks. Stay tuned!
+## 📚 Documentation
+
+Comprehensive guides are available to help you get started:
+
+1. **[Installation](docs/1_INSTALL.md)** - System requirements and dependencies
+2. **[Environment Setup](docs/2_ENV_SETUP.md)** - Docker setup and environment configuration
+3. **[Data Setup](docs/3_DATA_SETUP.md)** - Download and organize training data
+4. **[Training & Evaluation](docs/4_TRAIN_EVAL.md)** - Train and evaluate OV-SCAN models
+
+---
+
+## 📊 Performance
+
+### NuScenes Open-Vocabulary 3D Object Detection
+
+OV-SCAN achieves state-of-the-art performance on the NuScenes dataset for open-vocabulary 3D object detection:
+
+| Method | mAP | NDS | Car | Ped. | Truck | Motorcyc. | Bicyc. | T. Cone | Bus | Barrier | Con.V. | Trailer |
+|--------|-----|-----|-----|------|-------|-----------|--------|---------|-----|---------|--------|---------|
+| OV-SCAN | 31.1 | 32.8 | 61.6 | 60.1 | 30.3 | 39.8 | 31.0 | 39.6 | 22.0 | 18.8 | 6.8 | 0.6 |
+| OV-SCAN-Fusion* | 33.8 | 34.4 | 62.0 | 57.6 | 34.2 | 44.7 | 40.2 | 44.6 | 24.4 | 18.9 | 10.8 | 0.8 |
+
+\* OV-SCAN-Fusion uses multi-view image fusion for enhanced performance
+
+Pre-trained model checkpoints are available for download:
+- **[Download Pretrained Models](https://drive.google.com/file/d/1_HL7BiAGPdd4rwGyMBe3GvM0iuDVuFm8/view?usp=sharing)** - Includes backbone weights and trained OV-SCAN models
+
+---
 
 ## Citation
 If you use OV-SCAN in your research, please cite our paper:
