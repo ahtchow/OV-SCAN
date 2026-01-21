@@ -60,31 +60,37 @@ datasets/nuscenes/
 
 ## ⚙️ Step 4: Run Setup Script (Inside Container)
 
-**Inside the container**, run the setup script to compile CUDA extensions:
+**Inside the container**, run the setup script to compile CUDA extensions and install packages:
 
 ```bash
 bash /OV-SCAN/setup.sh
 ```
 
 **What it does:**
-- ✅ Compiles & installs **DCNv4** (CUDA extensions require GPU)
-- ✅ Builds **Patchwork++** Python wrapper for ground segmentation
+- ✅ Installs **OV-SCAN** package in development mode
 - ✅ Configures **NuScenes Devkit** PYTHONPATH
+- ✅ Builds **Patchwork++** Python wrapper for ground segmentation
 - ✅ Sets up **ImmortalTracker** for 3D object tracking
+- ✅ Compiles & installs **DCNv4** (CUDA extensions require GPU)
 - ✅ Verifies all installations
 
 **First run:** ~5-10 minutes (compiles CUDA code)
+
+> **Note:** If you encounter bashrc syntax errors in the Docker container, the script will automatically fix them.
 
 ## 🧪 Step 5: Verify Installation
 
 The setup script automatically verifies installations. You should see:
 
 ```
+✓ OV-SCAN package setup complete
 ✓ pypatchworkpp imported successfully
 ✓ DCNv4 imported successfully
 ✓ nuscenes-devkit imported successfully
 ✓ ImmortalTracker imported successfully
 ```
+
+If all components show ✓, you're ready to go!
 
 ---
 
