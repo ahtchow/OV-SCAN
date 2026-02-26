@@ -46,8 +46,7 @@ wandb/
 lightning_logs/
 
 # Data
-data/
-datasets/
+/datasets/
 *.pkl
 *.pickle
 *.npy
@@ -100,6 +99,9 @@ temp/
 *.c
 *.cpp
 *.h
+!pcdet/ops/**/*.c
+!pcdet/ops/**/*.cpp
+!pcdet/ops/**/*.h
 
 # Compiled CUDA
 *.cu.o
